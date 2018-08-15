@@ -15,7 +15,7 @@ class NewsListTile extends StatelessWidget {
       stream: bloc.items,
       builder: (context, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
         if (!snapshot.hasData) {
-          return Text('Stream still loading');
+          return Text('Stream still loading no snapshot data');
         }
 
         return FutureBuilder(
@@ -25,10 +25,32 @@ class NewsListTile extends StatelessWidget {
               return Text("still loading item $itemId");
             }
 
-            return Text(itemSnapshot.data.title);
+            return buildTile(itemSnapshot.data);
           },
         );
       },
+    );
+  }
+
+  Widget buildTile(ItemModel item) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text(item.title),
+          subtitle: Text('${item.score} votes'),
+          trailing: Column(
+            children: <Widget>[
+              Icon(Icons.comment),
+              Text('${item.descendants}')
+            ],
+          ),
+        ),
+        Divider(
+          height: 15.0,
+          color: Colors.black87,
+          indent: 5.0,
+        ),
+      ],
     );
   }
 }
